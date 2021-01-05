@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    </androidx.viewpager.widget.ViewPager>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvButton"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="#FFFFFF" />
+
+        <view
+            android:id="@+id/BackView"
+            class="com.example.myapplication2.customView.BackView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"/>
+
+    </FrameLayout>
+
+</LinearLayout>
