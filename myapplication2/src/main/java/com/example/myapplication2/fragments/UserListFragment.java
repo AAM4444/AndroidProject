@@ -36,7 +36,6 @@ public class UserListFragment extends Fragment{
     private int pageNumber;
     private RecyclerViewAdapter adapter;
     APIInterface apiInterface;
-    RecyclerView recyclerView;
     ArrayList<UserInfo> userInfoArrayList;
 
     public static UserListFragment newInstance(int pageNumber) {

@@ -13,6 +13,7 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.Nullable;
 
 import com.example.myapplication2.R;
+import com.example.myapplication2.Utils;
 
 import java.util.jar.Attributes;
 
@@ -39,12 +40,13 @@ public class BackView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawRoundRect(0, 0, 275, 275, 50, 50, paint);
+        int width = Utils.getWidth();
+        canvas.drawRoundRect(0, 0, width/2, width/2, 50, 50, paint);
     }
 
     private void SetupPaint() {
         paint = new Paint();
-        paint.setColor(Color.RED);
+        paint.setColor(Color.MAGENTA);
         paint.setAlpha(100);
     }
 }

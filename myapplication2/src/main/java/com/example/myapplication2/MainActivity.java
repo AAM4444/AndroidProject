@@ -4,6 +4,7 @@ package com.example.myapplication2;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,9 +41,9 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
     ArrayList<UserInfo> userInfoArrayList;
     ViewPager pager;
     View backView;
-    private static final String TAG = "myLogs";
     private RecyclerViewButtonAdapter adapterButton;
     public int totalPages;
+    DisplayMetrics metrics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,8 +159,9 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
 
 
             //Animation
+            int width = Utils.getWidth()/2;
                 ObjectAnimator animation = ObjectAnimator.ofFloat(backView, "translationX",
-                        adapterButton.currentSelectedIndex*275f);
+                        adapterButton.currentSelectedIndex*width);
             animation.setDuration(250);
             animation.start();
         }
