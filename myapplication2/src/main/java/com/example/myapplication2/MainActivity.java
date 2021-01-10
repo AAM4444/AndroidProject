@@ -82,11 +82,12 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
                 recyclerViewButton.setAdapter(adapterButton);
                 adapterButton.setOnButtonClickListener(MainActivity.this);
 
-                    Log.d("TAG", "MainActivity ViewPager.setAdapter");
-                ViewPager pager = (ViewPager) findViewById(R.id.viewpager);
+                ViewPager pager = findViewById(R.id.viewpager);
                 PagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), totalPages);
-                    Log.d("TAG", "MainActivity totalPages = " + totalPages);
                 pager.setAdapter(pagerAdapter);
+//                ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) pager.getLayoutParams();
+//                layoutParams.width = (Utils.getWidthDp()- 20);
+//                pager.set();
                 pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
                     @Override

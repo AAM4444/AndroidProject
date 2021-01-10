@@ -1,26 +1,20 @@
 package com.example.myapplication2.customView;
 
 import android.content.Context;
-import android.content.res.TypedArray;
+import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
-
-import androidx.annotation.ColorRes;
-import androidx.annotation.Nullable;
 
 import com.example.myapplication2.R;
 import com.example.myapplication2.Utils;
 
-import java.util.jar.Attributes;
-
 public class BackView extends View {
 
     public Paint paint;
-    public RectF rectF;
+    Resources resources = getResources();
 
     public BackView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -41,12 +35,13 @@ public class BackView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         int width = Utils.getWidth();
-        canvas.drawRoundRect(0, 0, width/2, width/2, 50, 50, paint);
+        canvas.drawRoundRect(0, 0, width/2, width/4, 50, 50, paint);
     }
 
     private void SetupPaint() {
         paint = new Paint();
-        paint.setColor(Color.MAGENTA);
+        int customViewColor = resources.getColor(R.color.customViewColor, null);
+        paint.setColor(customViewColor);
         paint.setAlpha(100);
     }
 }
