@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
         recyclerViewButton = findViewById(R.id.rvButton);
         pager = findViewById(R.id.viewpager);
         backView = findViewById(R.id.BackView);
-
 
         //Logger
             HttpLoggingInterceptor logger = new HttpLoggingInterceptor();
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
 
 
             //Animation
-            int width = Utils.getWidth()/2;
+            int width = (int) Utils.getWidth()/2;
                 ObjectAnimator animation = ObjectAnimator.ofFloat(backView, "translationX",
                         adapterButton.currentSelectedIndex*width);
             animation.setDuration(250);
