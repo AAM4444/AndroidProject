@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,25 +8,27 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="#FFFFFF">
     </androidx.viewpager.widget.ViewPager>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#FFFFFF" />
+        android:layout_height="50dp"
+        android:background="@null">
 
         <view
             android:id="@+id/BackView"
             class="com.example.myapplication2.customView.BackView"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:progressTint="#CAC7C7" />
+            android:layout_height="match_parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null" />
+
 
     </FrameLayout>
 

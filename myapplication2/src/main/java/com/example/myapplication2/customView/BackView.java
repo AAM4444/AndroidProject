@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.example.myapplication2.R;
@@ -34,14 +33,13 @@ public class BackView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int width = Utils.getWidth();
-        canvas.drawRoundRect(0, 0, width/2, width/4, 50, 50, paint);
+        float width = Utils.getWidth();
+        canvas.drawRoundRect(0, 0, width/2, width/8, width/16, width/16, paint);
     }
 
     private void SetupPaint() {
         paint = new Paint();
-        int customViewColor = resources.getColor(R.color.customViewColor, null);
+        int customViewColor = resources.getColor(R.color.colorOrangeDark, null);
         paint.setColor(customViewColor);
-        paint.setAlpha(100);
     }
 }

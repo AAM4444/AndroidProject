@@ -24,7 +24,6 @@ public class UserActivity extends AppCompatActivity {
         textViewEmail = findViewById(com.example.myapplication2.R.id.textViewEmail);
         textViewRemoteId = findViewById(com.example.myapplication2.R.id.textViewRemoteId);
         imageView = findViewById(com.example.myapplication2.R.id.imageView);
-
         Intent intent = getIntent();
 
         String Name = intent.getStringExtra("name");

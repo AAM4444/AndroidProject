@@ -7,8 +7,8 @@ import com.bumptech.glide.load.engine.Resource;
 
 public class Utils {
 
-    public static int getWidth() {
-        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    public static float getWidth() {
+        return (float)Resources.getSystem().getDisplayMetrics().widthPixels;
     }
 
     public static float getDpi() {

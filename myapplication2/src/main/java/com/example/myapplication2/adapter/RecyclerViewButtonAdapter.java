@@ -2,6 +2,7 @@ package com.example.myapplication2.adapter;
 
 //import
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -25,7 +26,6 @@ public class RecyclerViewButtonAdapter extends RecyclerView.Adapter <RecyclerVie
 
     private onButtonClickInterface listener;
     public int lastSelectedIndex = -1, currentSelectedIndex = 0, totalPages;
-    MainActivity mainActivity = new MainActivity();
 
     public RecyclerViewButtonAdapter(int totalPages, Context mContext) {
         this.totalPages = totalPages;
@@ -43,7 +43,7 @@ public class RecyclerViewButtonAdapter extends RecyclerView.Adapter <RecyclerVie
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
 
-        int displayWidth = Utils.getWidth();
+        int displayWidth = (int) Utils.getWidth();
             Log.d("TAG3", "displayWidth = " + displayWidth);
             Log.d("TAG3", "i = " + i);
         RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) viewHolder.itemView.getLayoutParams();
@@ -58,7 +58,7 @@ public class RecyclerViewButtonAdapter extends RecyclerView.Adapter <RecyclerVie
 //        Animation shake = AnimationUtils.loadAnimation(mContext, R.anim.shake);
 //        viewHolder.pageButton.startAnimation(shake);
         viewHolder.pageButton.setTextColor(ContextCompat.getColor(viewHolder.pageButton.getContext(),
-                currentSelectedIndex == i ? R.color.colorPrimaryDark : R.color.colorAccent));
+                currentSelectedIndex == i ? R.color.selectedButtonNumber : R.color.unselectedButtonNumber));
             viewHolder.pageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

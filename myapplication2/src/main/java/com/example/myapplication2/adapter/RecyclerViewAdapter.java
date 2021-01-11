@@ -1,6 +1,7 @@
 package com.example.myapplication2.adapter;
 
 import android.content.Context;
+import android.graphics.RenderNode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,6 +84,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
             tvName = itemView.findViewById(R.id.tv_name);
             tvLastName = itemView.findViewById(R.id.tv_last_name);
             tvEmail = itemView.findViewById(R.id.tv_email);
+            imgAvatar.setClipToOutline(true);
         }
     }
 
