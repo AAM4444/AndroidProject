@@ -34,7 +34,8 @@ public class BackView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         float width = Utils.getWidth();
-        canvas.drawRoundRect(0, 0, width/2, width/8, width/16, width/16, paint);
+        float height = Utils.getHeight();
+        canvas.drawRoundRect(0, 0, width/2, height, width/16, width/16, paint);
     }
 
     private void SetupPaint() {

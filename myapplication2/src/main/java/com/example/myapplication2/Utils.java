@@ -1,9 +1,6 @@
 package com.example.myapplication2;
 
 import android.content.res.Resources;
-import android.util.DisplayMetrics;
-
-import com.bumptech.glide.load.engine.Resource;
 
 public class Utils {
 
@@ -12,10 +9,10 @@ public class Utils {
     }
 
     public static float getDpi() {
-        return Resources.getSystem().getDisplayMetrics().xdpi;
+        return (float) Resources.getSystem().getDisplayMetrics().densityDpi;
     }
 
-    public static float getWidthDp() {
-        return (getWidth()*160/getDpi());
+    public static float getHeight() {
+        return (float) (50*(getDpi()/160));
     }
 }
