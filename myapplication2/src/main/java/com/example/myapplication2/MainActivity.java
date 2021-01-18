@@ -37,6 +37,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements OnItemClickInterface, onButtonClickInterface {
 
+    //TODO: добавь явно модификаторы доступа, только не сэть всем public)
     APIInterface apiInterface;
     RecyclerView recyclerViewButton;
     ArrayList<UserInfo> userInfoArrayList;
@@ -45,6 +46,14 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
     private RecyclerViewButtonAdapter adapterButton;
     public int totalPages;
     DisplayMetrics metrics;
+
+    //TODO: сейчас MainActivity у тебя запускается всего раз в приложении ты все делаешь тут
+    //TODO: но бывает такое, что MainActivity может запускать много раз в течение работы приложения
+    //TODO: и в твоем случае тогда бы Stetho и OkHttp инициализировались бы каждый раз при новом запуске
+    //TODO: а надо чтобы это происходило всего раз за цикл работы приложения
+
+    //TODO: поэтому вынеси из MainActivity инициализацию Stetho - подумай куда можно
+    //TODO: дальше тебе надо будет вынести из MainActivity инициализацию OkHttp в синглтон класс, проинициализировать его кое-где (тут подумай сам, где)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +128,13 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
 
     }
 
+    //TODO: https://github.com/JakeWharton/timber
+    //TODO: вот классная замена Log.d()
+    //TODO: например Log.d("TAG", "MainActivity.onFailure"); можно записать как Timber.d("MainActivity.onFailure");
+    //TODO: где вместо тега неявно будет подставляться имя класса
+    //TODO: можно также писать и через тег
+    //TODO: очень удобно
+
     @Override
     public void onItemClick(String name, String lastName, String email, String avatarLink, int remoteId) {
             Log.d("TAG", "MainActivity.onItemClick");
@@ -139,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
                 .orderBy("first_name DESC")
                 .execute();
     }
+
 
     @Override
     public void onButtonClick(final int i) {

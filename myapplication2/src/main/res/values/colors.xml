@@ -9,4 +9,7 @@
     <color name="unselectedButtonNumber">#FF000000</color>
     <color name="selectedButtonNumber">#FFFFFFFF</color>
 
+    <!--TODO: переименуй ресурсы через snake_case - так читабельнее. Ты так делал в strings.xml-->
+    <!--TODO: оставляю как есть только стандартные цвета colorPrimary и тд-->
+
 </resources>

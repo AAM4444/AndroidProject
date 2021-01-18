@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -11,24 +10,42 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="#FFFFFF">
+        <!-- TODO: Необязательно держать </androidx.viewpager.widget.ViewPager> тк у ViewPager'a нет детей тут -->
     </androidx.viewpager.widget.ViewPager>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@null">
+        <!--TODO: background @null и так по умолчанию-->
 
         <view
             android:id="@+id/BackView"
             class="com.example.myapplication2.customView.BackView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+        <!--TODO: ух ты, даже я так не делал, через class=""-->
+        <!--TODO: обычно делают вот так как ниже, это проще-->
+        <!--        <com.example.myapplication2.customView.BackView-->
+        <!--            android:id="@+id/BackView"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"/>-->
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@null" />
+        <!--TODO: тоже самое, background @null и так по умолчанию-->
+
+        <!--TODO: почитай camelCase и snake_case. Это типы нэйминга переменных, айдишек. -->
+        <!--TODO: Есть и другие, но это основные в андроиде-->
+        <!--TODO: обычно айдишки вьюх, ресурсов называют через snake_case-->
+        <!--TODO: а название классов, переменных в классах, методы называют через camelCase-->
+        <!--TODO: у тебя не соответствие нэйминга в основном в айдишках-->
+        <!--TODO: поэтому пройдись по xml и классам и переименуй где нужно-->
+        <!--TODO: например можешь еще в нэйминге сокращать слова button на btn, background на bg, но это не обязательно, просто экономит время-->
 
 
     </FrameLayout>

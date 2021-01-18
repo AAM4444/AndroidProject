@@ -7,3 +7,4 @@
     android:layout_height="50dp"
     android:layout_gravity="bottom"
     android:background="@null"/>
+    <!--TODO: тоже самое, background @null и так по умолчанию-->

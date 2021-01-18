@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--TODO: контейнер(ViewGroup) для RecyclerView тут не нужен, убери, тк RecyclerView - это тоже ViewGroup-->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     tools:context="com.example.myapplication2.fragments.UserListFragment"
