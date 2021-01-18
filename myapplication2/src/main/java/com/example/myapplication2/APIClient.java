@@ -1,5 +1,6 @@
 package com.example.myapplication2;
 
+//import
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -24,6 +25,6 @@ public class APIClient {
                 .build();
 
         return retrofit;
-
     }
+
 }

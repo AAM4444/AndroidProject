@@ -58,7 +58,7 @@ public class RecyclerViewButtonAdapter extends RecyclerView.Adapter <RecyclerVie
 //        Animation shake = AnimationUtils.loadAnimation(mContext, R.anim.shake);
 //        viewHolder.pageButton.startAnimation(shake);
         viewHolder.pageButton.setTextColor(ContextCompat.getColor(viewHolder.pageButton.getContext(),
-                currentSelectedIndex == i ? R.color.selectedButtonNumber : R.color.unselectedButtonNumber));
+                currentSelectedIndex == i ? R.color.color_white : R.color.color_black));
             viewHolder.pageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -78,7 +78,7 @@ public class RecyclerViewButtonAdapter extends RecyclerView.Adapter <RecyclerVie
 
         public ViewHolder (@NonNull View itemView) {
             super (itemView);
-            pageButton = itemView.findViewById(R.id.page_button);
+            pageButton = itemView.findViewById(R.id.button);
         }
     }
 

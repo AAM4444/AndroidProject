@@ -15,4 +15,5 @@ public class Utils {
     public static float getHeight() {
         return (float) (50*(getDpi()/160));
     }
+
 }

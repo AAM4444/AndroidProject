@@ -1,5 +1,6 @@
 package com.example.myapplication2.adapter;
 
+//import
 import android.content.Context;
 import android.graphics.RenderNode;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.example.myapplication2.UserInfo;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapter.ViewHolder> {
+
     private List<UserInfo> dataUser;
     private OnItemClickInterface listener;
     private Context mContext;

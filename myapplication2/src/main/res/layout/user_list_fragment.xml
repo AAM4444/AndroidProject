@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--TODO: контейнер(ViewGroup) для RecyclerView тут не нужен, убери, тк RecyclerView - это тоже ViewGroup-->
-<LinearLayout
+
+<androidx.recyclerview.widget.RecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    tools:context="com.example.myapplication2.fragments.UserListFragment"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment"
+    android:id="@+id/rv_list_user"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:baselineAligned="true"
-    android:background="#FFFFFF"
-    android:orientation="vertical">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvListUser"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </androidx.recyclerview.widget.RecyclerView>
-
-</LinearLayout>
+    android:background="#FFFFFF">
+</androidx.recyclerview.widget.RecyclerView>

@@ -17,7 +17,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textViewName"
+            android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -25,22 +25,22 @@
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/img_user" />
 
         <TextView
-                android:id="@+id/textViewLastName"
+                android:id="@+id/tv_last_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="LastName"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewName"
+                app:layout_constraintTop_toBottomOf="@+id/tv_name"
                 app:layout_constraintVertical_bias="0.01"
                 android:textSize="30sp"/>
 
         <TextView
-            android:id="@+id/textViewEmail"
+            android:id="@+id/tv_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -48,10 +48,10 @@
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewLastName" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_last_name" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/img_user"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_marginTop="70dp"
@@ -61,7 +61,7 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/textViewRemoteId"
+            android:id="@+id/tv_remote_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"

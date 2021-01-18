@@ -1,5 +1,6 @@
 package com.example.myapplication2.customView;
 
+//import
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -12,8 +13,8 @@ import com.example.myapplication2.Utils;
 
 public class BackView extends View {
 
-    public Paint paint;
-    Resources resources = getResources();
+    Paint paint;
+    Resources resources;
 
     public BackView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -40,7 +41,9 @@ public class BackView extends View {
 
     private void SetupPaint() {
         paint = new Paint();
-        int customViewColor = resources.getColor(R.color.colorOrangeDark, null);
+        resources = getResources();
+        int customViewColor = resources.getColor(R.color.color_orange_dark, null);
         paint.setColor(customViewColor);
     }
+
 }

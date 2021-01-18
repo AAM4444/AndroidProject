@@ -2,8 +2,8 @@
 <resources>
     <style name="MyToolbarTheme"
         parent="@style/ThemeOverlay.AppCompat.Dark">
-        <item name="colorControlNormal">@color/colorWhite</item>
-        <item name="titleTextColor">@color/colorWhite</item>
+        <item name="colorControlNormal">@color/color_white</item>
+        <item name="titleTextColor">@color/color_white</item>
     </style>
 </resources>
 

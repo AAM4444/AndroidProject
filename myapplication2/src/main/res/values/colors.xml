@@ -3,13 +3,9 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="colorWhite">#FFFFFF</color>
-    <color name="colorOrangeDark">@android:color/holo_orange_dark</color>
-    <color name="colorOrangeLight">@android:color/holo_orange_light</color>
-    <color name="unselectedButtonNumber">#FF000000</color>
-    <color name="selectedButtonNumber">#FFFFFFFF</color>
-
-    <!--TODO: переименуй ресурсы через snake_case - так читабельнее. Ты так делал в strings.xml-->
-    <!--TODO: оставляю как есть только стандартные цвета colorPrimary и тд-->
+    <color name="color_white">#FFFFFF</color>
+    <color name="color_black">#FF000000</color>
+    <color name="color_orange_dark">@android:color/holo_orange_dark</color>
+    <color name="color_orange_light">@android:color/holo_orange_light</color>
 
 </resources>

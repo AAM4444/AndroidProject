@@ -37,43 +37,25 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements OnItemClickInterface, onButtonClickInterface {
 
-    //TODO: добавь явно модификаторы доступа, только не сэть всем public)
-    APIInterface apiInterface;
-    RecyclerView recyclerViewButton;
-    ArrayList<UserInfo> userInfoArrayList;
-    ViewPager pager;
-    View backView;
+    public APIInterface apiInterface;
+    private RecyclerView recyclerViewButton;
+    private ViewPager viewPager;
+    private View backView;
     private RecyclerViewButtonAdapter adapterButton;
+    public OkHttpInitialize okHttpInitialize = new OkHttpInitialize();
     public int totalPages;
-    DisplayMetrics metrics;
-
-    //TODO: сейчас MainActivity у тебя запускается всего раз в приложении ты все делаешь тут
-    //TODO: но бывает такое, что MainActivity может запускать много раз в течение работы приложения
-    //TODO: и в твоем случае тогда бы Stetho и OkHttp инициализировались бы каждый раз при новом запуске
-    //TODO: а надо чтобы это происходило всего раз за цикл работы приложения
-
-    //TODO: поэтому вынеси из MainActivity инициализацию Stetho - подумай куда можно
-    //TODO: дальше тебе надо будет вынести из MainActivity инициализацию OkHttp в синглтон класс, проинициализировать его кое-где (тут подумай сам, где)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerViewButton = findViewById(R.id.rvButton);
-        pager = findViewById(R.id.viewpager);
-        backView = findViewById(R.id.BackView);
+        recyclerViewButton = findViewById(R.id.rv_button);
+        viewPager = findViewById(R.id.view_pager);
+        backView = findViewById(R.id.back_view);
 
-        //Logger
-            HttpLoggingInterceptor logger = new HttpLoggingInterceptor();
-        logger.setLevel(HttpLoggingInterceptor.Level.BODY);
-        //Stetho
-            Stetho.initializeWithDefaults(this);
-            Stetho.InitializerBuilder initializerBuilder = Stetho.newInitializerBuilder(this);
-            initializerBuilder.enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this));
-            initializerBuilder.enableDumpapp(Stetho.defaultDumperPluginsProvider(this));
-            Stetho.Initializer initializer = initializerBuilder.build();
-            Stetho.initialize(initializer);
+        //OkHttp initialize
+        okHttpInitialize.okHttp();
 
         apiInterface = APIClient.getClient().create(APIInterface.class);
         Call<UserList> firstCall = apiInterface.doGetUserList("1");
@@ -91,17 +73,14 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
                 recyclerViewButton.setAdapter(adapterButton);
                 adapterButton.setOnButtonClickListener(MainActivity.this);
 
-                ViewPager pager = findViewById(R.id.viewpager);
+                ViewPager pager = findViewById(R.id.view_pager);
                 PagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), totalPages);
                 pager.setAdapter(pagerAdapter);
-//                ViewPager.LayoutParams layoutParams = (ViewPager.LayoutParams) pager.getLayoutParams();
-//                layoutParams.width = (Utils.getWidthDp()- 20);
-//                pager.set();
+
                 pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
                     @Override
                     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
                     }
 
                     @Override
@@ -114,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
 
                     @Override
                     public void onPageScrollStateChanged(int state) {
-
                     }
                 });
             }
@@ -140,22 +118,12 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
             Log.d("TAG", "MainActivity.onItemClick");
         Intent intent = new Intent(this, UserActivity.class);
         intent.putExtra("name", name);
-        intent.putExtra("last_name", lastName);
+        intent.putExtra("lastName", lastName);
         intent.putExtra("email", email);
         intent.putExtra("avatar", avatarLink);
         intent.putExtra("remoteId", remoteId);
         startActivity(intent);
     }
-
-    public ArrayList<UserInfo> getUsersListFromDb(int pageSelected) {
-            Log.d("TAG", "MainActivity.getUsersListFromDb");
-        return new Select()
-                .from(UserInfo.class)
-                .where("from_page = " + pageSelected)
-                .orderBy("first_name DESC")
-                .execute();
-    }
-
 
     @Override
     public void onButtonClick(final int i) {
@@ -163,23 +131,21 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
                 Log.d("TAG2", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!onButtonClick i = " + i);
         if (adapterButton.currentSelectedIndex == i) {
                 Log.d("TAG2", "onButtonClick return");
-            return;
         } else {
                 Log.d("TAG2", "saveLastSelectedIndex = " + adapterButton.currentSelectedIndex);
             adapterButton.saveLastSelectedIndex(adapterButton.currentSelectedIndex);
                 Log.d("TAG2", "saveCurrentSelectedIndex = " + i);
             adapterButton.saveCurrentSelectedIndex(i);
                 Log.d("TAG2", "onButtonClick setCurrentItem i = " + i);
-            pager.setCurrentItem(i);
+            viewPager.setCurrentItem(i);
                 Log.d("TAG2", "notifyItemChanged i = " + i);
             adapterButton.notifyItemChanged(adapterButton.currentSelectedIndex);
             adapterButton.notifyItemChanged(adapterButton.lastSelectedIndex);
 
-
             //Animation
             int width = (int) Utils.getWidth()/2;
                 ObjectAnimator animation = ObjectAnimator.ofFloat(backView, "translationX",
-                        adapterButton.currentSelectedIndex*width);
+                        adapterButton.currentSelectedIndex * width);
             animation.setDuration(250);
             animation.start();
         }

@@ -1,29 +1,26 @@
 package com.example.myapplication2.fragments;
+
 //import
-import android.graphics.Color;
+
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-
 import com.activeandroid.query.Select;
 import com.example.myapplication2.APIClient;
 import com.example.myapplication2.APIInterface;
-import com.example.myapplication2.MainActivity;
 import com.example.myapplication2.OnItemClickInterface;
 import com.example.myapplication2.R;
 import com.example.myapplication2.UserInfo;
 import com.example.myapplication2.adapter.RecyclerViewAdapter;
-import com.example.myapplication2.adapter.RecyclerViewButtonAdapter;
-import com.example.myapplication2.onButtonClickInterface;
 import com.example.myapplication2.pojo.UserList;
 
 import java.util.ArrayList;
@@ -37,8 +34,8 @@ public class UserListFragment extends Fragment{
 
     private int pageNumber;
     private RecyclerViewAdapter adapter;
-    APIInterface apiInterface;
-    ArrayList<UserInfo> userInfoArrayList;
+    public APIInterface apiInterface;
+    public ArrayList<UserInfo> userInfoArrayList;
 
     public static UserListFragment newInstance(int pageNumber) {
         UserListFragment fragment = new UserListFragment();
@@ -67,7 +64,7 @@ public class UserListFragment extends Fragment{
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final RecyclerView recyclerView = view.findViewById(R.id.rvListUser);
+        final RecyclerView recyclerView = view.findViewById(R.id.rv_list_user);
 
         final int i = getArguments() != null ? getArguments().getInt("num") : 1;
         Log.d("TAG", "OnViewCreated i = " + i);
