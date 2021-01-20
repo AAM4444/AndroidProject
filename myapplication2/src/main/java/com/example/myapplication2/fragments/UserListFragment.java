@@ -48,14 +48,13 @@ public class UserListFragment extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         pageNumber = getArguments() != null ? getArguments().getInt("num") : 1;
-        Log.d("TAG", "UserListFragment pageNumber " + pageNumber);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-         Log.d("TAG", "UserListFragment onCreateView");
          View view = inflater.inflate(R.layout.user_list_fragment, container, false);
          return view;
     }
@@ -67,14 +66,12 @@ public class UserListFragment extends Fragment{
         final RecyclerView recyclerView = view.findViewById(R.id.rv_list_user);
 
         final int i = getArguments() != null ? getArguments().getInt("num") : 1;
-        Log.d("TAG", "OnViewCreated i = " + i);
 
         apiInterface = APIClient.getClient().create(APIInterface.class);
         Call<UserList> secondCall = apiInterface.doGetUserList(" " + i);
         secondCall.enqueue(new Callback<UserList>() {
             @Override
             public void onResponse(Call<UserList> call, Response<UserList> response) {
-                Log.d("TAG", "onResponse");
                 UserList userList = response.body();
 
                 List<UserList.Datum> datumList = userList.data;
@@ -86,7 +83,6 @@ public class UserListFragment extends Fragment{
                 }
 
                 adapter = new RecyclerViewAdapter(getUsersListFromDb(i), getActivity());
-                Log.d("TAG", "RecyclerViewAdapter Data" + getUsersListFromDb(i));
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 recyclerView.setAdapter(adapter);
                 adapter.setOnItemClickListener((OnItemClickInterface)getActivity());
@@ -101,15 +97,18 @@ public class UserListFragment extends Fragment{
             }
         });
 
-        Log.d("TAG", "UserListFragment onViewCreated");
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(getUsersListFromDb(pageNumber), getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener((OnItemClickInterface)getActivity());
     }
 
+    @Override
+    public void setRetainInstance(boolean retain) {
+        super.setRetainInstance(retain);
+    }
+
     public ArrayList<UserInfo> getUsersListFromDb(int pageSelected) {
-        Log.d("TAG", "getUsersListFromDb");
         return new Select()
                 .from(UserInfo.class)
                 .where("from_page = " + pageSelected)
