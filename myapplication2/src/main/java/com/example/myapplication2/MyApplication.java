@@ -7,5 +7,3 @@ public class MyApplication extends com.activeandroid.app.Application {
         Singleton.INSTANCE.stethoInitialize(this);
     }
 }
-
-

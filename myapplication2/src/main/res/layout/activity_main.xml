@@ -12,7 +12,6 @@
         android:layout_weight="1"
         android:background="#FFFFFF"/>
 
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="50dp">

@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
     private View backView;
     private RecyclerViewButtonAdapter adapterButton;
     public OkHttpInitialize okHttpInitialize = new OkHttpInitialize();
-    public int totalPages;
+    private int totalPages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,13 +91,6 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
         });
 
     }
-
-    //TODO: https://github.com/JakeWharton/timber
-    //TODO: вот классная замена Log.d()
-    //TODO: например Log.d("TAG", "MainActivity.onFailure"); можно записать как Timber.d("MainActivity.onFailure");
-    //TODO: где вместо тега неявно будет подставляться имя класса
-    //TODO: можно также писать и через тег
-    //TODO: очень удобно
 
     @Override
     public void onItemClick(String name, String lastName, String email, String avatarLink, int remoteId) {

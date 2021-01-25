@@ -33,9 +33,11 @@ import retrofit2.Response;
 public class UserListFragment extends Fragment{
 
     private int pageNumber;
-    private RecyclerViewAdapter adapter;
     public APIInterface apiInterface;
     public ArrayList<UserInfo> userInfoArrayList;
+    private List<UserList.Datum> datumList;
+    public RecyclerView recyclerView;
+    public int currentVisiblePosition = 0;
 
     public static UserListFragment newInstance(int pageNumber) {
         UserListFragment fragment = new UserListFragment();
@@ -63,49 +65,37 @@ public class UserListFragment extends Fragment{
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final RecyclerView recyclerView = view.findViewById(R.id.rv_list_user);
-
+        recyclerView = view.findViewById(R.id.rv_list_user);
         final int i = getArguments() != null ? getArguments().getInt("num") : 1;
 
-        apiInterface = APIClient.getClient().create(APIInterface.class);
-        Call<UserList> secondCall = apiInterface.doGetUserList(" " + i);
-        secondCall.enqueue(new Callback<UserList>() {
-            @Override
-            public void onResponse(Call<UserList> call, Response<UserList> response) {
-                UserList userList = response.body();
+        if(datumList == null) {
+            RecyclerViewAdapter adapter = new RecyclerViewAdapter(getUsersListFromDb(pageNumber), getContext());
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setAdapter(adapter);
+            adapter.setOnItemClickListener((OnItemClickInterface)getActivity());
 
-                List<UserList.Datum> datumList = userList.data;
+            apiInterface = APIClient.getClient().create(APIInterface.class);
+            Call<UserList> secondCall = apiInterface.doGetUserList(" " + i);
+            secondCall.enqueue(new Callback<UserList>() {
+                @Override
+                public void onResponse(Call<UserList> call, Response<UserList> response) {
+                    UserList userList = response.body();
 
-                for(UserList.Datum datum: datumList) {
-                    if(!isUserInDb(datum.id, i)) {
-                        saveUserInDb(datum, i);
+                    datumList = userList.data;
+
+                    for (UserList.Datum datum : datumList) {
+                        if (!isUserInDb(datum.id, i)) {
+                            saveUserInDb(datum, i);
+                        }
                     }
                 }
 
-                adapter = new RecyclerViewAdapter(getUsersListFromDb(i), getActivity());
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(adapter);
-                adapter.setOnItemClickListener((OnItemClickInterface)getActivity());
-
-                for(int z = 0; z < getUsersListFromDb(i).size(); z++) {
-                    System.out.println(getUsersListFromDb(i).get(z).firstName);
+                @Override
+                public void onFailure(Call<UserList> call, Throwable t) {
+                    call.cancel();
                 }
-            }
-            @Override
-            public void onFailure(Call<UserList> call, Throwable t) {
-                call.cancel();
-            }
-        });
-
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getUsersListFromDb(pageNumber), getContext());
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener((OnItemClickInterface)getActivity());
-    }
-
-    @Override
-    public void setRetainInstance(boolean retain) {
-        super.setRetainInstance(retain);
+            });
+        }
     }
 
     public ArrayList<UserInfo> getUsersListFromDb(int pageSelected) {
@@ -145,5 +135,5 @@ public class UserListFragment extends Fragment{
         userInfo.fromPage = pageSelected;
         userInfo.save();
     }
-}
 
+}
