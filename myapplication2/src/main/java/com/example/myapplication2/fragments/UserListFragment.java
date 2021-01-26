@@ -34,9 +34,9 @@ public class UserListFragment extends Fragment{
 
     private int pageNumber;
     public APIInterface apiInterface;
+    private RecyclerViewAdapter adapter;
     public ArrayList<UserInfo> userInfoArrayList;
     private List<UserList.Datum> datumList;
-    public RecyclerView recyclerView;
     public int currentVisiblePosition = 0;
 
     public static UserListFragment newInstance(int pageNumber) {
@@ -65,14 +65,8 @@ public class UserListFragment extends Fragment{
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView = view.findViewById(R.id.rv_list_user);
+        final RecyclerView recyclerView = view.findViewById(R.id.rv_list_user);
         final int i = getArguments() != null ? getArguments().getInt("num") : 1;
-
-        if(datumList == null) {
-            RecyclerViewAdapter adapter = new RecyclerViewAdapter(getUsersListFromDb(pageNumber), getContext());
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            recyclerView.setAdapter(adapter);
-            adapter.setOnItemClickListener((OnItemClickInterface)getActivity());
 
             apiInterface = APIClient.getClient().create(APIInterface.class);
             Call<UserList> secondCall = apiInterface.doGetUserList(" " + i);
@@ -88,6 +82,10 @@ public class UserListFragment extends Fragment{
                             saveUserInDb(datum, i);
                         }
                     }
+                    adapter = new RecyclerViewAdapter(getUsersListFromDb(pageNumber), getContext());
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    recyclerView.setAdapter(adapter);
+                    adapter.setOnItemClickListener((OnItemClickInterface)getActivity());
                 }
 
                 @Override
@@ -95,8 +93,8 @@ public class UserListFragment extends Fragment{
                     call.cancel();
                 }
             });
+
         }
-    }
 
     public ArrayList<UserInfo> getUsersListFromDb(int pageSelected) {
         return new Select()

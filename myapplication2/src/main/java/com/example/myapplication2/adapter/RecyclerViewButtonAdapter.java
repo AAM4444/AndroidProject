@@ -44,19 +44,13 @@ public class RecyclerViewButtonAdapter extends RecyclerView.Adapter <RecyclerVie
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
 
         int displayWidth = (int) Utils.getWidth();
-            Log.d("TAG3", "displayWidth = " + displayWidth);
-            Log.d("TAG3", "i = " + i);
         RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) viewHolder.itemView.getLayoutParams();
         lp.width = (displayWidth / 2);
         viewHolder.itemView.setLayoutParams(lp);
-
-        Log.d("TAG2", "onBindViewHolder i = " + i);
         final int position = i + 1;
+        Log.d("TAG", "onBindViewHolder i = " + i);
+        Log.d("TAG", "onBindViewHolder currentSelectedIndex = " + currentSelectedIndex);
         viewHolder.pageButton.setText(" " + position);
-        Log.d("TAG2", "onBindViewHolder currentSelectedIndex = " + currentSelectedIndex);
-        Log.d("TAG2", "onBindViewHolder position = " + position);
-//        Animation shake = AnimationUtils.loadAnimation(mContext, R.anim.shake);
-//        viewHolder.pageButton.startAnimation(shake);
         viewHolder.pageButton.setTextColor(ContextCompat.getColor(viewHolder.pageButton.getContext(),
                 currentSelectedIndex == i ? R.color.color_white : R.color.color_black));
             viewHolder.pageButton.setOnClickListener(new View.OnClickListener() {

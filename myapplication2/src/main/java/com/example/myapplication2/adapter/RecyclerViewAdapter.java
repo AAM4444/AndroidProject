@@ -27,16 +27,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
     private Context mContext;
 
     public RecyclerViewAdapter(List<UserInfo> dataUser, Context mContext) {
-        Log.d("TAG", "RecyclerViewAdapter");
         this.dataUser = dataUser;
-        Log.d("TAG", "mContext " + mContext);
         this.mContext = mContext;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder (@NonNull ViewGroup viewGroup, int i) {
-        Log.d("TAG", "onCreateViewHolder");
         View v = LayoutInflater
                 .from (viewGroup.getContext ())
                 .inflate (R.layout.list_item, viewGroup, false);
@@ -45,7 +42,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
 
     @Override
     public void onBindViewHolder (@NonNull final ViewHolder viewHolder, final int i) {
-        Log.d("TAG", "onBindViewHolder");
         final UserInfo datum = dataUser.get(i);
 
         viewHolder.tvName.setText(datum.firstName);
@@ -57,7 +53,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
 
                 @Override
                 public void onClick(View v) {
-                    Log.d("TAG", "i = " + i);
                     if(listener != null) {
                         listener.onItemClick(datum.firstName,
                                 datum.lastName,

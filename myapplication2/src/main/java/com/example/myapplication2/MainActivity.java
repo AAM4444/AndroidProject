@@ -31,14 +31,22 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
     private RecyclerView recyclerViewButton;
     private ViewPager viewPager;
     private View backView;
-    private RecyclerViewButtonAdapter adapterButton;
+    public RecyclerViewButtonAdapter adapterButton;
     public OkHttpInitialize okHttpInitialize = new OkHttpInitialize();
     private int totalPages;
+    int pressedButtonIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d("TAG", "pressedButtonIndex before = " + pressedButtonIndex);
+        if(savedInstanceState != null) {
+            Log.d("TAG", "savedInstanceState");
+           pressedButtonIndex = savedInstanceState.getInt("pressedButtonIndex");
+        }
+        Log.d("TAG", "pressedButtonIndex after = " + pressedButtonIndex);
 
         recyclerViewButton = findViewById(R.id.rv_button);
         viewPager = findViewById(R.id.view_pager);
@@ -56,16 +64,10 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
 
                 totalPages = userList.totalPages;
 
-                adapterButton = new RecyclerViewButtonAdapter(totalPages, MainActivity.this);
-                recyclerViewButton.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
-                recyclerViewButton.setAdapter(adapterButton);
-                adapterButton.setOnButtonClickListener(MainActivity.this);
+                onSetAdapterButton(totalPages);
+                onSetViewPager(totalPages);
 
-                ViewPager pager = findViewById(R.id.view_pager);
-                PagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), totalPages);
-                pager.setAdapter(pagerAdapter);
-
-                pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
                     @Override
                     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
                     public void onPageScrollStateChanged(int state) {
                     }
                 });
+                Log.d("TAG", "pressedButtonIndex notifyItemChanged = " + pressedButtonIndex);
             }
 
             @Override
@@ -90,6 +93,18 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
             }
         });
 
+    }
+
+    public void onSetAdapterButton(int totalPages) {
+        adapterButton = new RecyclerViewButtonAdapter(totalPages, MainActivity.this);
+        recyclerViewButton.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewButton.setAdapter(adapterButton);
+        adapterButton.setOnButtonClickListener(MainActivity.this);
+    }
+
+    public void onSetViewPager(int totalPages) {
+        PagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), totalPages);
+        viewPager.setAdapter(pagerAdapter);
     }
 
     @Override
@@ -119,6 +134,19 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
             animation.setDuration(250);
             animation.start();
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("pressedButtonIndex", adapterButton.currentSelectedIndex);
+        Log.d("TAG", "adapterButton.currentSelectedIndex = " + adapterButton.currentSelectedIndex);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        pressedButtonIndex = savedInstanceState.getInt("pressedButtonIndex");
     }
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {
