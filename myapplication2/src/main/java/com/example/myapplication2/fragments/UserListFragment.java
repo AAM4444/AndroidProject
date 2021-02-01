@@ -2,7 +2,9 @@ package com.example.myapplication2.fragments;
 
 //import
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,6 +134,42 @@ public class UserListFragment extends Fragment{
         userInfo.remoteId = datum.id;
         userInfo.fromPage = pageSelected;
         userInfo.save();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d("TAG2", "onDetach");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("TAG2", "onDestroy");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("TAG2", "onStop");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("TAG2", "onPause");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("TAG2", "onResume");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("TAG2", "onStart");
     }
 
 }

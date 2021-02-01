@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -172,6 +174,11 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
         public ViewPagerAdapter(@NonNull FragmentManager fm, int totalPages) {
             super(fm, totalPages);
         }
+
+        //no destroy - no method
+//        @Override
+//        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+//        }
 
         @NonNull
         @Override
