@@ -175,11 +175,6 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
             super(fm, totalPages);
         }
 
-        //no destroy - no method
-//        @Override
-//        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-//        }
-
         @NonNull
         @Override
         public Fragment getItem(int position) {
