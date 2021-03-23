@@ -2,8 +2,6 @@ package com.example.myapplication2.adapter;
 
 //import
 import android.content.Context;
-import android.graphics.RenderNode;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +14,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.myapplication2.R;
 import com.example.myapplication2.OnItemClickInterface;
-import com.example.myapplication2.UserInfo;
+import com.example.myapplication2.User;
 
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapter.ViewHolder> {
 
-    private List<UserInfo> dataUser;
+    private List<User> dataUser;
     private OnItemClickInterface listener;
     private Context mContext;
 
-    public RecyclerViewAdapter(List<UserInfo> dataUser, Context mContext) {
+    public RecyclerViewAdapter(List<User> dataUser, Context mContext) {
         this.dataUser = dataUser;
         this.mContext = mContext;
     }
@@ -42,7 +40,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
 
     @Override
     public void onBindViewHolder (@NonNull final ViewHolder viewHolder, final int i) {
-        final UserInfo datum = dataUser.get(i);
+        final User datum = dataUser.get(i);
 
         viewHolder.tvName.setText(datum.firstName);
         viewHolder.tvLastName.setText (datum.lastName);
@@ -65,8 +63,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         }
 
     @Override
-    public int getItemCount () {
-        return dataUser.size ();
+    public int getItemCount() {
+        return dataUser.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

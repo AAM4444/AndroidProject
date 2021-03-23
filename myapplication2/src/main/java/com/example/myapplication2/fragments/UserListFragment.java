@@ -1,6 +1,7 @@
 package com.example.myapplication2.fragments;
 
 //import
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,32 +14,37 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.activeandroid.query.Select;
 import com.example.myapplication2.APIClient;
 import com.example.myapplication2.APIInterface;
+import com.example.myapplication2.MyApplication;
 import com.example.myapplication2.OnItemClickInterface;
 import com.example.myapplication2.R;
-import com.example.myapplication2.UserInfo;
+import com.example.myapplication2.User;
+import com.example.myapplication2.UserDao;
+import com.example.myapplication2.UsersDatabase;
 import com.example.myapplication2.adapter.RecyclerViewAdapter;
 import com.example.myapplication2.pojo.UserList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserListFragment extends Fragment{
+public class UserListFragment extends Fragment {
 
     private int pageNumber;
-    public APIInterface apiInterface;
+    private APIInterface apiInterface;
     private RecyclerViewAdapter adapter;
-    public ArrayList<UserInfo> userInfoArrayList;
-    public List<UserList.Datum> datumList;
     private RecyclerView recyclerView;
+    private List<UserList.Datum> datumList;
+    private UserTask userTask;
+    private List<User> userList;
+    UsersDatabase db = MyApplication.getInstance().getDatabase();
+    UserDao userDao = db.userDao();
 
     public static UserListFragment newInstance(int pageNumber) {
+        Log.d("TAG", "UserListFragment fragment");
         UserListFragment fragment = new UserListFragment();
         Bundle args = new Bundle();
         args.putInt("num", pageNumber + 1);
@@ -49,6 +55,7 @@ public class UserListFragment extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("TAG", "onCreate fragment");
         setRetainInstance(true);
         pageNumber = getArguments() != null ? getArguments().getInt("num") : 1;
     }
@@ -56,33 +63,29 @@ public class UserListFragment extends Fragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-         View view = inflater.inflate(R.layout.user_list_fragment, container, false);
-         return view;
+        Log.d("TAG", "onCreateView fragment");
+        View view = inflater.inflate(R.layout.user_list_fragment, container, false);
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Log.d("TAG", "onViewCreated fragment");
         recyclerView = view.findViewById(R.id.rv_list_user);
         final int i = getArguments() != null ? getArguments().getInt("num") : 1;
-
-        Log.d("TAG2", "datumList = " + datumList);
         if (datumList == null) {
             apiInterface = APIClient.getClient().create(APIInterface.class);
             Call<UserList> secondCall = apiInterface.doGetUserList(" " + i);
             secondCall.enqueue(new Callback<UserList>() {
                 @Override
                 public void onResponse(Call<UserList> call, Response<UserList> response) {
+                    Log.d("TAG", "onResponse");
                     UserList userList = response.body();
-
                     datumList = userList.data;
 
-                    for (UserList.Datum datum : datumList) {
-                        if (!isUserInDb(datum.id, i)) {
-                            saveUserInDb(datum, i);
-                        }
-                    }
+                    userTask = new UserTask();
+                    userTask.execute();
                 }
 
                 @Override
@@ -91,88 +94,55 @@ public class UserListFragment extends Fragment{
                 }
             });
         }
-        onSetAdapter(pageNumber);
-    }
-
-    public ArrayList<UserInfo> getUsersListFromDb(int pageSelected) {
-        return new Select()
-                .from(UserInfo.class)
-                .where("from_page = " + pageSelected)
-//                .orderBy("first_name DESC")
-                .execute();
-    }
-
-    public boolean isUserInDb(int checkRemoteId, int pageSelected) {
-        userInfoArrayList = getUsersListFromDb(pageSelected);
-        boolean isExist = false;
-        if (userInfoArrayList.isEmpty()) {
-            isExist = false;
-        } else {
-            for (int i = 0; i < userInfoArrayList.size(); ) {
-                if (checkRemoteId != userInfoArrayList.get(i).remoteId) {
-                    i++;
-                } else {
-                    isExist = true;
-                    break;
-                }
-                isExist = false;
-            }
+        if(datumList != null) {
+            onSetAdapter();
         }
-        return isExist;
+
     }
 
-    public void saveUserInDb(UserList.Datum datum, int pageSelected) {
-        UserInfo userInfo = new UserInfo();
-        userInfo.avatar = datum.avatar;
-        userInfo.email = datum.email;
-        userInfo.firstName = datum.firstName;
-        userInfo.lastName = datum.lastName;
-        userInfo.remoteId = datum.id;
-        userInfo.fromPage = pageSelected;
-        userInfo.save();
-    }
-
-    public void onSetAdapter(int pageNumber) {
-        adapter = new RecyclerViewAdapter(getUsersListFromDb(pageNumber), getContext());
+    public void onSetAdapter() {
+        Log.d("TAG", "onSetAdapter fragment");
+        adapter = new RecyclerViewAdapter(userList, getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener((OnItemClickInterface)getActivity());
+        adapter.setOnItemClickListener((OnItemClickInterface) getActivity());
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d("TAG2", "onDetach");
+    class UserTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            for (UserList.Datum datum : datumList) {
+                User user = new User();
+                user.remoteId = datum.id;
+                user.email = datum.email;
+                user.firstName = datum.firstName;
+                user.lastName = datum.lastName;
+                user.avatar = datum.avatar;
+                user.fromPage = pageNumber;
+                userDao.insert(user);
+            }
+            userList = userDao.getUsersByPage(pageNumber);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            onSetAdapter();
+        }
+
+//        public void onSetAdapter() {
+//            adapter = new RecyclerViewAdapter(userList, getContext());
+//            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//            recyclerView.setAdapter(adapter);
+//            adapter.setOnItemClickListener((OnItemClickInterface) getActivity());
+        }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("TAG2", "onDestroy");
-    }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("TAG2", "onStop");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("TAG2", "onPause");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("TAG2", "onResume");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d("TAG2", "onStart");
-    }
-
-}

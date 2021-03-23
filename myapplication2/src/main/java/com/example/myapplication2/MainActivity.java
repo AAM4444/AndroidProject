@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,14 +27,14 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements OnItemClickInterface, onButtonClickInterface {
 
-    public APIInterface apiInterface;
+    private APIInterface apiInterface;
     private RecyclerView recyclerViewButton;
     private ViewPager viewPager;
     private View backView;
-    public RecyclerViewButtonAdapter adapterButton;
-    public OkHttpInitialize okHttpInitialize = new OkHttpInitialize();
-    public int totalPages;
-    public int pressedButtonIndex, unPressedButtonIndex;
+    private RecyclerViewButtonAdapter adapterButton;
+    private OkHttpInitialize okHttpInitialize;
+    private int totalPages;
+    private int pressedButtonIndex, unPressedButtonIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +44,16 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
         recyclerViewButton = findViewById(R.id.rv_button);
         viewPager = findViewById(R.id.view_pager);
         backView = findViewById(R.id.back_view);
+        okHttpInitialize = new OkHttpInitialize();
 
         //Restore buttons and custom View state after screen rotation
         if (savedInstanceState != null) {
             pressedButtonIndex = savedInstanceState.getInt("currentSelectedIndex");
-            Log.d("TAG", "pressedButtonIndex = " + pressedButtonIndex);
+//            Log.d("TAG", "pressedButtonIndex = " + pressedButtonIndex);
             unPressedButtonIndex = savedInstanceState.getInt("lastSelectedIndex");
-            Log.d("TAG", "unPressedButtonIndex = " + unPressedButtonIndex);
+//            Log.d("TAG", "unPressedButtonIndex = " + unPressedButtonIndex);
             totalPages = savedInstanceState.getInt("totalPages");
-            Log.d("TAG", "totalPages = " + totalPages);
+//            Log.d("TAG", "totalPages = " + totalPages);
             onSetAdapterButton(totalPages);
             onSetViewPager(totalPages);
             onRestoreButtonState(pressedButtonIndex, unPressedButtonIndex);
@@ -66,14 +65,14 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
 
         if (savedInstanceState == null & totalPages == 0) {
             apiInterface = APIClient.getClient().create(APIInterface.class);
-            Call<UserList> firstCall = apiInterface.doGetUserList("1");
+            Call<UserList> firstCall = apiInterface.doGetUserList("2");
             firstCall.enqueue(new Callback<UserList>() {
                 @Override
                 public void onResponse(Call<UserList> call, Response<UserList> response) {
+                    Log.d("TAG", "onResponse MainActivity");
                     UserList userList = response.body();
 
                     totalPages = userList.totalPages;
-
                     onSetAdapterButton(totalPages);
                     onSetViewPager(totalPages);
                     onSetViewPagerListener();
@@ -164,9 +163,12 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("currentSelectedIndex", adapterButton.currentSelectedIndex);
-        outState.putInt("lastSelectedIndex", adapterButton.lastSelectedIndex);
-        outState.putInt("totalPages", totalPages);
         Log.d("TAG", "adapterButton.currentSelectedIndex = " + adapterButton.currentSelectedIndex);
+        outState.putInt("lastSelectedIndex", adapterButton.lastSelectedIndex);
+        Log.d("TAG", "adapterButton.lastSelectedIndex = " + adapterButton.lastSelectedIndex);
+        outState.putInt("totalPages", totalPages);
+        Log.d("TAG", "adapterButton.totalPages = " + adapterButton.totalPages);
+
     }
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {

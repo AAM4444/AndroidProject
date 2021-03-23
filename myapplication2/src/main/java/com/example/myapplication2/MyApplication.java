@@ -1,9 +1,24 @@
 package com.example.myapplication2;
 
-public class MyApplication extends com.activeandroid.app.Application {
+import android.app.Application;
+
+public class MyApplication extends Application {
+
+    public static MyApplication instance;
+    private UsersDatabase database;
 
     public void onCreate() {
         super.onCreate();
-        Singleton.INSTANCE.stethoInitialize(this);
+        instance = this;
+//        Singleton.INSTANCE.stethoInitialize(this);
+        Singleton.INSTANCE.CreateDatabase(getApplicationContext());
+    }
+
+    public static MyApplication getInstance() {
+        return instance;
+    }
+
+    public UsersDatabase getDatabase() {
+        return Singleton.INSTANCE.CreateDatabase(getApplicationContext());
     }
 }
