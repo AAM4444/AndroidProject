@@ -1,5 +1,6 @@
 package com.example.myapplication2;
 
+//import
 import android.content.res.Resources;
 
 public class Utils {

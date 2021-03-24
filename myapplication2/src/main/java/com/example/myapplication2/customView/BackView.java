@@ -13,12 +13,11 @@ import com.example.myapplication2.Utils;
 
 public class BackView extends View {
 
-    Paint paint;
-    Resources resources;
+    private Paint paint;
 
     public BackView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        SetupPaint();
+        setupPaint();
     }
 
     @Override
@@ -39,9 +38,9 @@ public class BackView extends View {
         canvas.drawRoundRect(0, 0, width/2, height, width/16, width/16, paint);
     }
 
-    private void SetupPaint() {
+    private void setupPaint() {
         paint = new Paint();
-        resources = getResources();
+        Resources resources = getResources();
         int customViewColor = resources.getColor(R.color.color_orange_dark, null);
         paint.setColor(customViewColor);
     }

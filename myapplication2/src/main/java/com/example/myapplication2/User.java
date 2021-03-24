@@ -1,5 +1,6 @@
 package com.example.myapplication2;
 
+//import
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;

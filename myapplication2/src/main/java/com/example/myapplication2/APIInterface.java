@@ -11,4 +11,5 @@ public interface APIInterface {
 
     @GET("/api/users?")
     Call<UserList> doGetUserList(@Query("page") String page);
+
 }

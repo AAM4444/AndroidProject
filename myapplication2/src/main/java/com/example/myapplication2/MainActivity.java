@@ -4,7 +4,6 @@ package com.example.myapplication2;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -27,14 +26,11 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements OnItemClickInterface, onButtonClickInterface {
 
-    private APIInterface apiInterface;
     private RecyclerView recyclerViewButton;
     private ViewPager viewPager;
     private View backView;
     private RecyclerViewButtonAdapter adapterButton;
-    private OkHttpInitialize okHttpInitialize;
     private int totalPages;
-    private int pressedButtonIndex, unPressedButtonIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,34 +40,29 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
         recyclerViewButton = findViewById(R.id.rv_button);
         viewPager = findViewById(R.id.view_pager);
         backView = findViewById(R.id.back_view);
-        okHttpInitialize = new OkHttpInitialize();
+
+        OkHttpInitialize okHttpInitialize = new OkHttpInitialize();
+        okHttpInitialize.okHttp();
 
         //Restore buttons and custom View state after screen rotation
         if (savedInstanceState != null) {
-            pressedButtonIndex = savedInstanceState.getInt("currentSelectedIndex");
-//            Log.d("TAG", "pressedButtonIndex = " + pressedButtonIndex);
-            unPressedButtonIndex = savedInstanceState.getInt("lastSelectedIndex");
-//            Log.d("TAG", "unPressedButtonIndex = " + unPressedButtonIndex);
+            int pressedButtonIndex = savedInstanceState.getInt("currentSelectedIndex");
+            int unPressedButtonIndex = savedInstanceState.getInt("lastSelectedIndex");
             totalPages = savedInstanceState.getInt("totalPages");
-//            Log.d("TAG", "totalPages = " + totalPages);
+
             onSetAdapterButton(totalPages);
             onSetViewPager(totalPages);
             onRestoreButtonState(pressedButtonIndex, unPressedButtonIndex);
             onSetViewPagerListener();
         }
 
-        //OkHttp initialize
-        okHttpInitialize.okHttp();
-
         if (savedInstanceState == null & totalPages == 0) {
-            apiInterface = APIClient.getClient().create(APIInterface.class);
-            Call<UserList> firstCall = apiInterface.doGetUserList("2");
+            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
+            Call<UserList> firstCall = apiInterface.doGetUserList("1");
             firstCall.enqueue(new Callback<UserList>() {
                 @Override
                 public void onResponse(Call<UserList> call, Response<UserList> response) {
-                    Log.d("TAG", "onResponse MainActivity");
                     UserList userList = response.body();
-
                     totalPages = userList.totalPages;
                     onSetAdapterButton(totalPages);
                     onSetViewPager(totalPages);
@@ -87,18 +78,6 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
         }
     }
 
-    public void onSetAdapterButton(int totalPages) {
-        adapterButton = new RecyclerViewButtonAdapter(totalPages, MainActivity.this);
-        recyclerViewButton.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
-        recyclerViewButton.setAdapter(adapterButton);
-        adapterButton.setOnButtonClickListener(MainActivity.this);
-    }
-
-    public void onSetViewPager(int totalPages) {
-        PagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), totalPages);
-        viewPager.setAdapter(pagerAdapter);
-    }
-
     public void onSetViewPagerListener() {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -108,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
 
             @Override
             public void onPageSelected(int position) {
-                if (position != adapterButton.currentSelectedIndex) {
+                if (position != adapterButton.getCurrentSelectedIndex()) {
                     onButtonClick(position);
                 }
             }
@@ -132,44 +111,50 @@ public class MainActivity extends AppCompatActivity implements OnItemClickInterf
 
     @Override
     public void onButtonClick(final int i) {
-        if (adapterButton.currentSelectedIndex == i) {
-        } else {
-            adapterButton.saveLastSelectedIndex(adapterButton.currentSelectedIndex);
-            adapterButton.saveCurrentSelectedIndex(i);
+        if (adapterButton.getCurrentSelectedIndex() != i) {
+            adapterButton.setLastSelectedIndex(adapterButton.getCurrentSelectedIndex());
+            adapterButton.setCurrentSelectedIndex(i);
+            adapterButton.notifyItemChanged(adapterButton.getCurrentSelectedIndex());
+            adapterButton.notifyItemChanged(adapterButton.getLastSelectedIndex());
             viewPager.setCurrentItem(i);
-            adapterButton.notifyItemChanged(adapterButton.currentSelectedIndex);
-            adapterButton.notifyItemChanged(adapterButton.lastSelectedIndex);
-
-            int width = (int) Utils.getWidth()/2;
-                ObjectAnimator animation = ObjectAnimator.ofFloat(backView, "translationX",
-                        adapterButton.currentSelectedIndex * width);
-            animation.setDuration(250);
-            animation.start();
+            setBackView();
         }
-    }
-
-    public void onRestoreButtonState(int clickedButton, int unClickedButton) {
-        adapterButton.notifyItemChanged(clickedButton);
-        adapterButton.notifyItemChanged(unClickedButton);
-
-        int width = (int) Utils.getWidth()/2;
-        ObjectAnimator animation = ObjectAnimator.ofFloat(backView, "translationX",
-                adapterButton.currentSelectedIndex * width);
-        animation.setDuration(250);
-        animation.start();
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("currentSelectedIndex", adapterButton.currentSelectedIndex);
-        Log.d("TAG", "adapterButton.currentSelectedIndex = " + adapterButton.currentSelectedIndex);
-        outState.putInt("lastSelectedIndex", adapterButton.lastSelectedIndex);
-        Log.d("TAG", "adapterButton.lastSelectedIndex = " + adapterButton.lastSelectedIndex);
+        outState.putInt("currentSelectedIndex", adapterButton.getCurrentSelectedIndex());
+        outState.putInt("lastSelectedIndex", adapterButton.getLastSelectedIndex());
         outState.putInt("totalPages", totalPages);
-        Log.d("TAG", "adapterButton.totalPages = " + adapterButton.totalPages);
-
     }
+
+    public void onSetAdapterButton(int totalPages) {
+        adapterButton = new RecyclerViewButtonAdapter(totalPages);
+        adapterButton.setOnButtonClickListener(this);
+        recyclerViewButton.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewButton.setAdapter(adapterButton);
+    }
+
+    public void onSetViewPager(int totalPages) {
+        PagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), totalPages);
+        viewPager.setAdapter(pagerAdapter);
+    }
+
+    public void onRestoreButtonState(int clickedButtonIndex, int unClickedButtonIndex) {
+        adapterButton.notifyItemChanged(clickedButtonIndex);
+        adapterButton.notifyItemChanged(unClickedButtonIndex);
+        setBackView();
+    }
+
+    private void setBackView() {
+        int width = (int) Utils.getWidth()/2;
+        ObjectAnimator animation = ObjectAnimator.ofFloat(backView, "translationX",
+                adapterButton.getCurrentSelectedIndex() * width);
+        animation.setDuration(250);
+        animation.start();
+    }
+
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {
 

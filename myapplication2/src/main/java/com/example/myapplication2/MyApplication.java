@@ -1,16 +1,15 @@
 package com.example.myapplication2;
 
+//import
 import android.app.Application;
 
 public class MyApplication extends Application {
 
-    public static MyApplication instance;
-    private UsersDatabase database;
+    private static MyApplication instance;
 
     public void onCreate() {
         super.onCreate();
         instance = this;
-//        Singleton.INSTANCE.stethoInitialize(this);
         Singleton.INSTANCE.CreateDatabase(getApplicationContext());
     }
 

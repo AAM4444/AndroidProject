@@ -1,5 +1,6 @@
 package com.example.myapplication2;
 
+//import
 import android.content.Context;
 
 import androidx.room.Room;
@@ -12,6 +13,12 @@ public class Singleton {
 
     private Singleton() {
 
+    }
+
+    public UsersDatabase CreateDatabase(Context context) {
+        UsersDatabase db = Room.databaseBuilder(context, UsersDatabase.class, "database")
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4).build();
+        return db;
     }
 
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
@@ -31,12 +38,5 @@ public class Singleton {
         public void migrate(SupportSQLiteDatabase database) {
         }
     };
-
-    public UsersDatabase CreateDatabase(Context context) {
-        UsersDatabase db = Room.databaseBuilder(context, UsersDatabase.class, "database").addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4).build();
-        return db;
-    }
-
-
 
 }

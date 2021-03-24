@@ -20,22 +20,21 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapter.ViewHolder> {
 
-    private List<User> dataUser;
+    private final List<User> dataUser;
+    private final Context context;
     private OnItemClickInterface listener;
-    private Context mContext;
 
-    public RecyclerViewAdapter(List<User> dataUser, Context mContext) {
+    public RecyclerViewAdapter(List<User> dataUser, Context context) {
         this.dataUser = dataUser;
-        this.mContext = mContext;
+        this.context = context;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder (@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater
-                .from (viewGroup.getContext ())
+        View v = LayoutInflater.from (viewGroup.getContext ())
                 .inflate (R.layout.list_item, viewGroup, false);
-        return new ViewHolder (v);
+        return new ViewHolder(v);
     }
 
     @Override
@@ -45,10 +44,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         viewHolder.tvName.setText(datum.firstName);
         viewHolder.tvLastName.setText (datum.lastName);
         viewHolder.tvEmail.setText (datum.email);
-        Glide.with(mContext).load(datum.avatar).into(viewHolder.imgAvatar);
+        Glide.with(context).load(datum.avatar).into(viewHolder.imgAvatar);
 
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
                     if(listener != null) {
@@ -67,24 +65,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter <RecyclerViewAdapt
         return dataUser.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-            private ImageView imgAvatar;
-            private TextView tvName;
-            private TextView tvLastName;
-            private TextView tvEmail;
+    public void setOnItemClickListener (OnItemClickInterface listener) {
+        this.listener = listener;
+    }
 
-        public ViewHolder (@NonNull View itemView) {
-            super (itemView);
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+            private final ImageView imgAvatar;
+            private final TextView tvName;
+            private final TextView tvLastName;
+            private final TextView tvEmail;
+
+        public ViewHolder (@NonNull View view) {
+            super(view);
             imgAvatar = itemView.findViewById(R.id.img_avatar);
             tvName = itemView.findViewById(R.id.tv_name);
             tvLastName = itemView.findViewById(R.id.tv_last_name);
             tvEmail = itemView.findViewById(R.id.tv_email);
             imgAvatar.setClipToOutline(true);
         }
-    }
 
-    public void setOnItemClickListener (OnItemClickInterface listener) {
-        this.listener = listener;
     }
 
 }

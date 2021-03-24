@@ -1,5 +1,6 @@
 package com.example.myapplication2.pojo;
 
+//import
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;

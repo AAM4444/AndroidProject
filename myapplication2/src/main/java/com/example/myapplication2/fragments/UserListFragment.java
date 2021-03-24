@@ -34,17 +34,14 @@ import retrofit2.Response;
 public class UserListFragment extends Fragment {
 
     private int pageNumber;
-    private APIInterface apiInterface;
-    private RecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
     private List<UserList.Datum> datumList;
     private UserTask userTask;
     private List<User> userList;
-    UsersDatabase db = MyApplication.getInstance().getDatabase();
-    UserDao userDao = db.userDao();
+    private final UsersDatabase db = MyApplication.getInstance().getDatabase();
+    private final UserDao userDao = db.userDao();
 
     public static UserListFragment newInstance(int pageNumber) {
-        Log.d("TAG", "UserListFragment fragment");
         UserListFragment fragment = new UserListFragment();
         Bundle args = new Bundle();
         args.putInt("num", pageNumber + 1);
@@ -55,7 +52,6 @@ public class UserListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("TAG", "onCreate fragment");
         setRetainInstance(true);
         pageNumber = getArguments() != null ? getArguments().getInt("num") : 1;
     }
@@ -63,7 +59,6 @@ public class UserListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Log.d("TAG", "onCreateView fragment");
         View view = inflater.inflate(R.layout.user_list_fragment, container, false);
         return view;
     }
@@ -71,16 +66,16 @@ public class UserListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("TAG", "onViewCreated fragment");
+
         recyclerView = view.findViewById(R.id.rv_list_user);
         final int i = getArguments() != null ? getArguments().getInt("num") : 1;
+
         if (datumList == null) {
-            apiInterface = APIClient.getClient().create(APIInterface.class);
+            APIInterface apiInterface = APIClient.getClient().create(APIInterface.class);
             Call<UserList> secondCall = apiInterface.doGetUserList(" " + i);
             secondCall.enqueue(new Callback<UserList>() {
                 @Override
                 public void onResponse(Call<UserList> call, Response<UserList> response) {
-                    Log.d("TAG", "onResponse");
                     UserList userList = response.body();
                     datumList = userList.data;
 
@@ -101,12 +96,12 @@ public class UserListFragment extends Fragment {
     }
 
     public void onSetAdapter() {
-        Log.d("TAG", "onSetAdapter fragment");
-        adapter = new RecyclerViewAdapter(userList, getContext());
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(userList, getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener((OnItemClickInterface) getActivity());
     }
+
 
     class UserTask extends AsyncTask<Void, Void, Void> {
 
@@ -136,13 +131,8 @@ public class UserListFragment extends Fragment {
             super.onPostExecute(aVoid);
             onSetAdapter();
         }
-
-//        public void onSetAdapter() {
-//            adapter = new RecyclerViewAdapter(userList, getContext());
-//            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//            recyclerView.setAdapter(adapter);
-//            adapter.setOnItemClickListener((OnItemClickInterface) getActivity());
-        }
     }
+
+}
 
 
